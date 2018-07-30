@@ -1,0 +1,1987 @@
+{
+    "info": {
+        "title": "MAX RESTful API List",
+        "version": "1.0.0"
+    },
+    "swagger": "2.0",
+    "produces": ["application/json"],
+    "host": "max-api.maicoin.com",
+    "basePath": "/",
+    "tags": [{
+        "name": "private",
+        "description": "private endpoints"
+    }, {
+        "name": "public",
+        "description": "public endpoints"
+    }, {
+        "name": "internal",
+        "description": "internal usage"
+    }, {
+        "name": "mobile",
+        "description": "mobile endpoints"
+    }],
+    "paths": {
+        "/api/v2/markets": {
+            "get": {
+                "description": "get all available markets.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Market"
+                            }
+                        }
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2Markets"
+            }
+        },
+        "/api/v2/currencies": {
+            "get": {
+                "description": "get all available currencies.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Currency"
+                            }
+                        }
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2Currencies"
+            }
+        },
+        "/api/v2/tickers/{market}": {
+            "get": {
+                "description": "get ticker of specific market",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "path",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "ticker is within 24 hours, \"at\" is timestamp in seconds since Unix epoch",
+                        "schema": {
+                            "$ref": "#/definitions/Ticker"
+                        }
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2TickersMarket"
+            }
+        },
+        "/api/v2/tickers": {
+            "get": {
+                "description": "get ticker of all markets",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "ticker is within 24 hours, \"at\" is timestamp in seconds since Unix epoch",
+                        "schema": {
+                            "$ref": "#/definitions/Tickers"
+                        }
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2Tickers"
+            }
+        },
+        "/api/v2/members/me": {
+            "get": {
+                "description": "get your profile and accounts infomation",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Member"
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2MembersMe"
+            }
+        },
+        "/api/v2/deposits": {
+            "get": {
+                "description": "get your deposits history",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "currency",
+                    "description": "unique currency id, check /api/v2/currencies for available currencies",
+                    "type": "string",
+                    "enum": ["eth", "trx", "gnt", "bch", "pal", "btc", "twd", "bat", "cccx", "mith", "zrx", "knc", "omg", "eos", "ltc", "usdt"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "from",
+                    "description": "target period start (Epoch time in seconds)",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "to",
+                    "description": "target period end (Epoch time in seconds)",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "state",
+                    "type": "string",
+                    "enum": ["submitting", "cancelled", "submitted", "suspended", "rejected", "accepted", "refunded", "suspect", "refund_cancelled"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "pagination",
+                    "description": "do pagination \u0026 return metadata in header (default false)",
+                    "type": "boolean",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "page",
+                    "description": "page number, applied for pagination (default 1)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 1,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned limit (1~1000, default 50)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 50,
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "offset",
+                    "description": "records to skip, not applied for pagination (default 0)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 0,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Deposit"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2Deposits"
+            }
+        },
+        "/api/v2/deposit": {
+            "get": {
+                "description": "get details of a specific deposit",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "txid",
+                    "description": "unique transaction id",
+                    "type": "string",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Deposit"
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2Deposit"
+            }
+        },
+        "/api/v2/deposit_address": {
+            "get": {
+                "summary": "where to deposit",
+                "description": "The address could be empty when a new one is generating, try again later in that case.",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "currency",
+                    "description": "unique currency id, check /api/v2/currencies for available currencies",
+                    "type": "string",
+                    "enum": ["eth", "trx", "gnt", "bch", "pal", "btc", "bat", "cccx", "mith", "zrx", "knc", "omg", "eos", "ltc", "usdt"],
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/PaymentAddress"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2DepositAddress",
+                "deprecated": true
+            }
+        },
+        "/api/v2/deposit_addresses": {
+            "post": {
+                "summary": "create deposit addresses",
+                "description": "Address creation is asynchronous, please call GET /deposit_addresses later to get generated addresses",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "currency",
+                    "description": "unique currency id, check /api/v2/currencies for available currencies",
+                    "type": "string",
+                    "enum": ["eth", "trx", "gnt", "bch", "pal", "btc", "bat", "cccx", "mith", "zrx", "knc", "omg", "eos", "ltc", "usdt"],
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/PaymentAddress"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "postApiV2DepositAddresses"
+            },
+            "get": {
+                "summary": "where to deposit",
+                "description": "The addresses could be empty before generated, please call POST /deposit_addresses in that case",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "currency",
+                    "description": "unique currency id, check /api/v2/currencies for available currencies",
+                    "type": "string",
+                    "enum": ["eth", "trx", "gnt", "bch", "pal", "btc", "bat", "cccx", "mith", "zrx", "knc", "omg", "eos", "ltc", "usdt"],
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/PaymentAddress"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2DepositAddresses"
+            }
+        },
+        "/api/v2/withdrawals": {
+            "get": {
+                "description": "get your withdrawals history",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "currency",
+                    "description": "unique currency id, check /api/v2/currencies for available currencies",
+                    "type": "string",
+                    "enum": ["eth", "trx", "gnt", "bch", "pal", "btc", "twd", "bat", "cccx", "mith", "zrx", "knc", "omg", "eos", "ltc", "usdt"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "from",
+                    "description": "target period start (Epoch time in seconds)",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "to",
+                    "description": "target period end (Epoch time in seconds)",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "state",
+                    "type": "string",
+                    "enum": ["submitting", "submitted", "rejected", "accepted", "suspect", "approved", "processing", "retryable", "sent", "canceled", "failed", "pending", "confirmed"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "pagination",
+                    "description": "do pagination \u0026 return metadata in header (default false)",
+                    "type": "boolean",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "page",
+                    "description": "page number, applied for pagination (default 1)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 1,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned limit (1~1000, default 50)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 50,
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "offset",
+                    "description": "records to skip, not applied for pagination (default 0)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 0,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Withdrawal"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2Withdrawals"
+            }
+        },
+        "/api/v2/withdrawal": {
+            "get": {
+                "description": "get details of a specific withdraw",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "uuid",
+                    "description": "unique withdraw id",
+                    "type": "string",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Withdrawal"
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2Withdrawal"
+            }
+        },
+        "/api/v2/orders/clear": {
+            "post": {
+                "description": "cancel all your orders with given market and side",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "side",
+                    "description": "set tp cancel only sell (asks) or buy (bids) orders",
+                    "type": "string",
+                    "enum": ["sell", "buy"],
+                    "required": false
+                }, {
+                    "in": "formData",
+                    "name": "market",
+                    "description": "specify market like btctwd / ethbtc",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt"],
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Order"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "postApiV2OrdersClear"
+            }
+        },
+        "/api/v2/orders": {
+            "post": {
+                "description": "create a sell/buy order",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "side",
+                    "description": "'sell' or 'buy'",
+                    "type": "string",
+                    "enum": ["sell", "buy"],
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "volume",
+                    "description": "total amount to sell/buy, an order could be partially executed",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "price",
+                    "description": "price of a unit",
+                    "type": "string",
+                    "required": false
+                }, {
+                    "in": "formData",
+                    "name": "stop_price",
+                    "description": "price to trigger a stop order",
+                    "type": "string",
+                    "required": false
+                }, {
+                    "in": "formData",
+                    "name": "ord_type",
+                    "description": "'limit', 'market', 'stop_limit', or 'stop_market'",
+                    "type": "string",
+                    "enum": ["limit", "market", "stop_limit", "stop_market"],
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "postApiV2Orders"
+            },
+            "get": {
+                "description": "get your orders, results is paginated.",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "state",
+                    "description": "filter by state, default to 'wait'",
+                    "type": "string",
+                    "default": "wait",
+                    "enum": ["wait", "done", "convert", "cancel"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "order_by",
+                    "description": "order in created time, default to 'asc'.",
+                    "type": "string",
+                    "default": "asc",
+                    "enum": ["asc", "desc"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "pagination",
+                    "description": "do pagination \u0026 return metadata in header (default true)",
+                    "type": "boolean",
+                    "default": true,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "page",
+                    "description": "page number, applied for pagination (default 1)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 1,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned limit (1~1000, default 100)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 100,
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "offset",
+                    "description": "records to skip, not applied for pagination (default 0)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 0,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Order"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2Orders"
+            }
+        },
+        "/api/v2/orders/multi": {
+            "post": {
+                "summary": "create multiple sell/buy orders",
+                "description": "create multiple sell/buy orders, please put your orders as an array in json body",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "orders[side]",
+                    "description": "'sell' or 'buy'",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": ["sell", "buy"]
+                    },
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "orders[volume]",
+                    "description": "total amount to sell/buy, an order could be partially executed",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "orders[price]",
+                    "description": "price of a unit",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": false
+                }, {
+                    "in": "formData",
+                    "name": "orders[stop_price]",
+                    "description": "price to trigger a stop order",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "required": false
+                }, {
+                    "in": "formData",
+                    "name": "orders[ord_type]",
+                    "description": "'limit', 'market', 'stop_limit', or 'stop_market'",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": ["limit", "market", "stop_limit", "stop_market"]
+                    },
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Order"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "postApiV2OrdersMulti"
+            }
+        },
+        "/api/v2/order/delete": {
+            "post": {
+                "description": "cancel an order",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "formData",
+                    "name": "id",
+                    "description": "unique order id",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "postApiV2OrderDelete"
+            }
+        },
+        "/api/v2/order": {
+            "get": {
+                "description": "get a specific order.",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "id",
+                    "description": "unique order id",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2Order"
+            }
+        },
+        "/api/v2/order_book": {
+            "get": {
+                "description": "get the order book of a specified market",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "asks_limit",
+                    "description": "returned sell orders limit, default to 20",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 20,
+                    "minimum": 1,
+                    "maximum": 200,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "bids_limit",
+                    "description": "returned buy orders limit, default to 20",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 20,
+                    "minimum": 1,
+                    "maximum": 200,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/OrderBook"
+                        }
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2OrderBook"
+            }
+        },
+        "/api/v2/depth": {
+            "get": {
+                "description": "get depth of a specified market, sorted from highest price to lowest",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned price levels limit, default to 300",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 300,
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "[price, volume], timestamp in seconds since Unix epoch"
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2Depth"
+            }
+        },
+        "/api/v2/trades/my": {
+            "get": {
+                "description": "get your executed trades, sorted in reverse creation order",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "header",
+                    "name": "X-MAX-ACCESSKEY",
+                    "description": "access key",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-PAYLOAD",
+                    "description": "encoded payload",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "header",
+                    "name": "X-MAX-SIGNATURE",
+                    "description": "encrypted signature",
+                    "type": "string",
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "timestamp",
+                    "description": "the seconds elapsed since Unix epoch, set to return trades executed before the time only",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "from",
+                    "description": "trade id, set ot return trades created after the trade",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "to",
+                    "description": "trade id, set to return trades created before the trade",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "order_by",
+                    "description": "order the trades by created time, default to 'desc'",
+                    "type": "string",
+                    "default": "desc",
+                    "enum": ["asc", "desc"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "pagination",
+                    "description": "do pagination \u0026 return metadata in header (default true)",
+                    "type": "boolean",
+                    "default": true,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "page",
+                    "description": "page number, applied for pagination (default 1)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 1,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned limit (1~1000, default 50)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 50,
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "offset",
+                    "description": "records to skip, not applied for pagination (default 0)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 0,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Trade"
+                            }
+                        }
+                    }
+                },
+                "tags": ["private"],
+                "operationId": "getApiV2TradesMy"
+            }
+        },
+        "/api/v2/trades": {
+            "get": {
+                "description": "get recent trades on market, sorted in reverse creation order",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "timestamp",
+                    "description": "the seconds elapsed since Unix epoch, set to return trades executed before the time only",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "from",
+                    "description": "trade id, set ot return trades created after the trade",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "to",
+                    "description": "trade id, set to return trades created before the trade",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "order_by",
+                    "description": "order the trades by created time, default to 'desc'",
+                    "type": "string",
+                    "default": "desc",
+                    "enum": ["asc", "desc"],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "pagination",
+                    "description": "do pagination \u0026 return metadata in header (default true)",
+                    "type": "boolean",
+                    "default": true,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "page",
+                    "description": "page number, applied for pagination (default 1)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 1,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned limit (1~1000, default 50)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 50,
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "offset",
+                    "description": "records to skip, not applied for pagination (default 0)",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 0,
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Trade"
+                            }
+                        }
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2Trades"
+            }
+        },
+        "/api/v2/k": {
+            "get": {
+                "description": "get OHLC(k line) of a specific market",
+                "produces": ["application/json"],
+                "parameters": [{
+                    "in": "query",
+                    "name": "market",
+                    "description": "unique market id, check /api/v2/markets for available markets",
+                    "type": "string",
+                    "enum": ["btctwd", "ethtwd", "ltctwd", "mithtwd", "bchtwd", "usdttwd", "ethbtc", "mitheth", "trxtwd", "trxbtc", "trxeth", "trxusdt", "btcusdt", "ethusdt", "bchusdt", "ltcusdt", "mithbtc", "mithusdt", "cccxbtc", "cccxeth", "cccxtwd", "cccxusdt", "eosbtc", "eoseth", "eostwd", "eosusdt", "palbtc", "paleth", "paltwd", "batbtc", "bateth", "battwd", "batusdt", "zrxbtc", "zrxeth", "zrxtwd", "zrxusdt", "gntbtc", "gnteth", "gnttwd", "gntusdt", "omgbtc", "omgeth", "omgtwd", "omgusdt", "kncbtc", "knceth", "knctwd", "kncusdt", "all"],
+                    "required": true
+                }, {
+                    "in": "query",
+                    "name": "limit",
+                    "description": "returned data points limit, default to 30",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 30,
+                    "minimum": 1,
+                    "maximum": 10000,
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "period",
+                    "description": "time period of K line in minute, default to 1",
+                    "type": "integer",
+                    "format": "int32",
+                    "default": 1,
+                    "enum": [1, 5, 15, 30, 60, 120, 240, 360, 720, 1440, 4320, 10080],
+                    "required": false
+                }, {
+                    "in": "query",
+                    "name": "timestamp",
+                    "description": "the seconds elapsed since Unix epoch, set to return data after the timestamp only",
+                    "type": "integer",
+                    "format": "int32",
+                    "required": false
+                }],
+                "responses": {
+                    "200": {
+                        "description": "array of [timestamp, open, high, low, close, volume]"
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2K"
+            }
+        },
+        "/api/v2/timestamp": {
+            "get": {
+                "description": "get server current time, in seconds since Unix epoch",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Unix epoch timestamp in seconds"
+                    }
+                },
+                "tags": ["public"],
+                "operationId": "getApiV2Timestamp"
+            }
+        }
+    },
+    "definitions": {
+        "Market": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "btctwd",
+                    "description": "unique market id, check /api/v2/markets for available markets"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "BTC/TWD",
+                    "description": "market name"
+                },
+                "base_unit": {
+                    "type": "string",
+                    "example": "btc",
+                    "description": "base unit"
+                },
+                "base_unit_precision": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 5,
+                    "description": "fixed precision of base unit"
+                },
+                "quote_unit": {
+                    "type": "string",
+                    "example": "twd",
+                    "description": "quote unit"
+                },
+                "quote_unit_precision": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1,
+                    "description": "fixed precision of quote unit"
+                }
+            },
+            "description": "get all available markets."
+        },
+        "Currency": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "twd",
+                    "description": "unique currency id, check /api/v2/currencies for available currencies"
+                },
+                "precision": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 0,
+                    "description": "fixed precision of the currency"
+                }
+            },
+            "description": "get all available currencies."
+        },
+        "Ticker": {
+            "type": "object",
+            "properties": {
+                "at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1531905257,
+                    "description": "timestamp in seconds since Unix epoch"
+                },
+                "buy": {
+                    "type": "string",
+                    "example": "200000.0",
+                    "description": "highest buy price"
+                },
+                "sell": {
+                    "type": "string",
+                    "example": "200000.0",
+                    "description": "lowest sell price"
+                },
+                "open": {
+                    "type": "string",
+                    "example": "200000.0",
+                    "description": "price before 24 hours"
+                },
+                "low": {
+                    "type": "string",
+                    "example": "200000.0",
+                    "description": "lowest price within 24 hours"
+                },
+                "high": {
+                    "type": "string",
+                    "example": "200000.0",
+                    "description": "highest price within 24 hours"
+                },
+                "last": {
+                    "type": "string",
+                    "example": "200000.0",
+                    "description": "last traded price"
+                },
+                "vol": {
+                    "type": "string",
+                    "example": "10.0",
+                    "description": "traded volume within 24 hours"
+                }
+            },
+            "description": "get ticker of specific market"
+        },
+        "Tickers": {
+            "type": "object",
+            "properties": {
+                "btctwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "ethtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "ltctwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "mithtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "bchtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "usdttwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "ethbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "mitheth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "trxtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "trxbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "trxeth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "trxusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "btcusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "ethusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "bchusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "ltcusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "mithbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "mithusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "cccxbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "cccxeth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "cccxtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "cccxusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "eosbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "eoseth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "eostwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "eosusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "palbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "paleth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "paltwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "batbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "bateth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "battwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "batusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "zrxbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "zrxeth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "zrxtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "zrxusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "gntbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "gnteth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "gnttwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "gntusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "omgbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "omgeth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "omgtwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "omgusdt": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "kncbtc": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "knceth": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "knctwd": {
+                    "$ref": "#/definitions/Ticker"
+                },
+                "kncusdt": {
+                    "$ref": "#/definitions/Ticker"
+                }
+            },
+            "description": "get ticker of all markets"
+        },
+        "Member": {
+            "type": "object",
+            "properties": {
+                "sn": {
+                    "type": "string",
+                    "example": "50c2df99-8941-49e2-8d5a-5dd9596d729d",
+                    "description": "unique serial number"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Max",
+                    "description": "user name"
+                },
+                "language": {
+                    "type": "string",
+                    "example": "zh-TW",
+                    "description": "user language"
+                },
+                "phone_set": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "valid phone set"
+                },
+                "country_code": {
+                    "type": "string",
+                    "example": "886",
+                    "description": "phone country code"
+                },
+                "identity_number": {
+                    "type": "string",
+                    "example": "A123456789",
+                    "description": "taiwanese identity number"
+                },
+                "invoice_carrier_id": {
+                    "type": "string",
+                    "example": "555",
+                    "description": "invoice carrier id"
+                },
+                "invoice_carrier_type": {
+                    "type": "string",
+                    "example": "NPOBAN",
+                    "description": "invoice carrier type"
+                },
+                "is_deleted": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "is deleted"
+                },
+                "is_frozen": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "is frozen"
+                },
+                "is_activated": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "is activated"
+                },
+                "profile_verified": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "is user profile verified"
+                },
+                "kyc_approved": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "is kyc approved"
+                },
+                "kyc_state": {
+                    "type": "string",
+                    "example": "verified",
+                    "description": "member kyc state: unverified, verifying, profile_verifying, verified, rejected"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "931212345",
+                    "description": "user mobile phone number"
+                },
+                "user_agreement_checked": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "is user aggreement checked"
+                },
+                "user_agreement_version": {
+                    "type": "string",
+                    "example": "4.1",
+                    "description": "which tou version user agree with"
+                },
+                "bank": {
+                    "$ref": "#/definitions/Bank"
+                },
+                "documents": {
+                    "$ref": "#/definitions/MemberDocs"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "max@maicoin.com",
+                    "description": "user email"
+                },
+                "accounts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Account"
+                    }
+                },
+                "member_type": {
+                    "type": "string",
+                    "example": "type_guest",
+                    "description": "type_guest, type_coin_1, type_coin_2, type_fiat"
+                },
+                "level": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 0,
+                    "description": "member level"
+                }
+            },
+            "description": "get your profile and accounts infomation"
+        },
+        "Bank": {
+            "type": "object",
+            "properties": {
+                "branch": {
+                    "type": "string",
+                    "example": "700",
+                    "description": "bank branch code"
+                },
+                "account": {
+                    "type": "string",
+                    "example": "12345677654321",
+                    "description": "bank account"
+                },
+                "state": {
+                    "type": "string",
+                    "example": "verified",
+                    "description": "bank account state"
+                }
+            }
+        },
+        "MemberDocs": {
+            "type": "object",
+            "properties": {
+                "photo_id_front_state": {
+                    "type": "string",
+                    "example": "verified",
+                    "description": "ID photo front status"
+                },
+                "photo_id_back_state": {
+                    "type": "string",
+                    "example": "verified",
+                    "description": "ID photo back status"
+                },
+                "cellphone_bill_state": {
+                    "type": "string",
+                    "example": "verified",
+                    "description": "supplemental document status"
+                },
+                "selfie_with_id_state": {
+                    "type": "string",
+                    "example": "verified",
+                    "description": "selfie status"
+                }
+            }
+        },
+        "Account": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "type": "string",
+                    "example": "twd",
+                    "description": "currency id, e.g. twd, btc, ..."
+                },
+                "balance": {
+                    "type": "string",
+                    "example": "100000.0",
+                    "description": "available balance"
+                },
+                "locked": {
+                    "type": "string",
+                    "example": "5566.0",
+                    "description": "locked funds"
+                }
+            }
+        },
+        "Deposit": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "type": "string",
+                    "example": "eth",
+                    "description": "currency id"
+                },
+                "amount": {
+                    "type": "string",
+                    "example": "0.019",
+                    "description": "deposit amount"
+                },
+                "fee": {
+                    "type": "string",
+                    "example": "0.0",
+                    "description": "deposit fee"
+                },
+                "txid": {
+                    "type": "string",
+                    "example": "0x8daa98e07886985bd6a142cd81b83582d6085f7eb931dc4984c18c84f2a845e0",
+                    "description": "unique transaction id"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1521726960,
+                    "description": "received timestamp (second)"
+                },
+                "confirmations": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 100,
+                    "description": "confirmations for crypto currency"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1521726960,
+                    "description": "lastest updated timestamp (second)"
+                },
+                "state": {
+                    "type": "string",
+                    "example": "accepted",
+                    "description": "current state"
+                }
+            },
+            "description": "get details of a specific deposit"
+        },
+        "PaymentAddress": {
+            "type": "object",
+            "properties": {
+                "composite_currency": {
+                    "type": "string",
+                    "example": "usdt",
+                    "description": "currency id"
+                },
+                "version": {
+                    "type": "string",
+                    "example": "omni",
+                    "description": "currency transfer standard, nil if only 1 version supported"
+                },
+                "currency": {
+                    "type": "string",
+                    "example": "omniusdt",
+                    "description": "internal code for the currency"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "omniusdt",
+                    "description": "deposit address, nil when generating or deposit suspended"
+                }
+            },
+            "description": "The addresses could be empty before generated, please call POST /deposit_addresses in that case"
+        },
+        "Withdrawal": {
+            "type": "object",
+            "properties": {
+                "uuid": {
+                    "type": "string",
+                    "example": "18022603540001",
+                    "description": "unique withdraw id"
+                },
+                "currency": {
+                    "type": "string",
+                    "example": "eth",
+                    "description": "currency id"
+                },
+                "amount": {
+                    "type": "string",
+                    "example": "0.019",
+                    "description": "withdraw amount"
+                },
+                "fee": {
+                    "type": "string",
+                    "example": "0.0",
+                    "description": "withdraw fee"
+                },
+                "txid": {
+                    "type": "string",
+                    "example": "0x8daa98e07886985bd6a142cd81b83582d6085f7eb931dc4984c18c84f2a845e0",
+                    "description": "transaction id"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1521726960,
+                    "description": "created timestamp (second)"
+                },
+                "updated_at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1521726960,
+                    "description": "lastest updated timestamp (second)"
+                },
+                "state": {
+                    "type": "string",
+                    "example": "confirmed",
+                    "description": "current state"
+                }
+            },
+            "description": "get details of a specific withdraw"
+        },
+        "Order": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 87,
+                    "description": "unique order id"
+                },
+                "side": {
+                    "type": "string",
+                    "example": "buy",
+                    "description": "'sell' or 'buy'"
+                },
+                "ord_type": {
+                    "type": "string",
+                    "example": "limit",
+                    "description": "'limit', 'market', 'stop_limit', or 'stop_market'"
+                },
+                "price": {
+                    "type": "string",
+                    "example": "21499.0",
+                    "description": "price of a unit"
+                },
+                "stop_price": {
+                    "type": "string",
+                    "example": "21499.0",
+                    "description": "price to trigger a stop order"
+                },
+                "avg_price": {
+                    "type": "string",
+                    "example": "21499.0",
+                    "description": "average execution price"
+                },
+                "state": {
+                    "type": "string",
+                    "example": "done",
+                    "description": "'wait', 'done', 'cancel', or 'convert'; 'wait' means waiting for fulfillment; 'done' means fullfilled; 'cancel' means cancelled; 'convert' means the stop order is triggered"
+                },
+                "market": {
+                    "type": "string",
+                    "example": "ethtwd",
+                    "description": "market id, check /api/v2/markets for available markets"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1521726960,
+                    "description": "created timestamp (second)"
+                },
+                "volume": {
+                    "type": "string",
+                    "example": "0.2658",
+                    "description": "total amount to sell/buy, an order could be partially executed"
+                },
+                "remaining_volume": {
+                    "type": "string",
+                    "example": "0.0",
+                    "description": "remaining volume"
+                },
+                "executed_volume": {
+                    "type": "string",
+                    "example": "0.2658",
+                    "description": "executed volume"
+                },
+                "trades_count": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1,
+                    "description": "trade count"
+                }
+            },
+            "description": "get a specific order."
+        },
+        "OrderBook": {
+            "type": "object",
+            "properties": {
+                "asks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Order"
+                    }
+                },
+                "bids": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Order"
+                    }
+                }
+            },
+            "description": "get the order book of a specified market"
+        },
+        "Trade": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 68444,
+                    "description": "trade id"
+                },
+                "price": {
+                    "type": "string",
+                    "example": "21499.0",
+                    "description": "strike price"
+                },
+                "volume": {
+                    "type": "string",
+                    "example": "0.2658",
+                    "description": "traded volume"
+                },
+                "funds": {
+                    "type": "string",
+                    "example": "5714.4",
+                    "description": "total traded amount"
+                },
+                "market": {
+                    "type": "string",
+                    "example": "ethtwd",
+                    "description": "market id"
+                },
+                "created_at": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 1521726960,
+                    "description": "created timestamp (second)"
+                },
+                "side": {
+                    "type": "string",
+                    "example": "bid",
+                    "description": "'bid' or 'ask', according to maker"
+                },
+                "order_id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 87,
+                    "description": "order related to you"
+                }
+            },
+            "description": "get recent trades on market, sorted in reverse creation order"
+        }
+    }
+}
