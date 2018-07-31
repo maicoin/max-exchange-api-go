@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 # max-exchange-api-go
 MAX (Maicoin Assets eXchange) Go SDK
 
@@ -6,6 +8,12 @@ MAX (Maicoin Assets eXchange) Go SDK
 See the `examples` directory.
 
 ## Documentation for API Endpoints
+
+### Notes
+
+Private APIs require authentication. Pass your API tokens by `AuthToken()` or `WSAuthToken()` before using them.
+
+### RESTful APIs
 
 All URIs are relative to *https://max-api.maicoin.com*
 
@@ -40,6 +48,20 @@ Class | Go Method | HTTP request | Description
 *Private* | [**CreateOrder**](https://max.maicoin.com/documents/api_list#/) | **POST** /api/v2/orders |
 *Private* | [**CreateOrders**](https://max.maicoin.com/documents/api_list#/) | **POST** /api/v2/orders/multi | create multiple sell/buy orders
 
+### Websocket APIs (Beta)
+
+Class | Go Method |  Description
+------------ | ------------- | -------------
+*Public* | [**SubscribeTicker**](https://max.maicoin.com/documents/websocket_api) | Subscribe the realtime price information
+*Public* | [**SubscribeOrderBook**](https://max.maicoin.com/documents/websocket_api) | Subscribe the realtime changes on order books
+*Public* | [**SubscribeTrade**](https://max.maicoin.com/documents/websocket_api) | Subscribe the realtime trades information
+
+Class | Go Method |  Description
+------------ | ------------- | -------------
+*Private* | [**SubscribeAccount**](https://max.maicoin.com/documents/websocket_api) | Subscribe the accounts changes for an user
 
 ## API Reference
-See [MAX RESTful API List](https://max.maicoin.com/documents/api_list#/).
+
+See [MAX RESTful API List](https://max.maicoin.com/documents/api_list#/)
+and
+[MAX Websocket API List (Beta)](https://max.maicoin.com/documents/websocket_api).
