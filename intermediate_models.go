@@ -25,7 +25,7 @@ import (
 
 type tickerJSON struct {
 	// timestamp in seconds since Unix epoch
-	At     int         `json:"at,omitempty"`
+	At     json.Number `json:"at,omitempty"`
 	Buy    json.Number `json:"buy,omitempty"`
 	Sell   json.Number `json:"sell,omitempty"`
 	Open   json.Number `json:"open,omitempty"`
@@ -36,11 +36,13 @@ type tickerJSON struct {
 }
 
 func (t *tickerJSON) Ticker() (*models.Ticker, error) {
-	ticker := &models.Ticker{
-		At: time.Unix(int64(t.At), 0),
-	}
+	ticker := &models.Ticker{}
 
-	var err error
+	at, err := t.At.Int64()
+	if err != nil {
+		return nil, err
+	}
+	ticker.At = time.Unix(at, 0)
 	ticker.Buy, err = t.Buy.Float64()
 	if err != nil {
 		return nil, err
@@ -231,4 +233,91 @@ func (c candlesJSON) Candles() ([]*models.Candle, error) {
 	}
 
 	return candles, nil
+}
+
+type tickerEventJSON struct {
+	At     json.Number `json:"at,omitempty"`
+	Market string      `json:"market,omitempty"`
+	Buy    json.Number `json:"buy,omitempty"`
+	Sell   json.Number `json:"sell,omitempty"`
+	Open   json.Number `json:"open,omitempty"`
+	Last   json.Number `json:"last,omitempty"`
+	High   json.Number `json:"high,omitempty"`
+	Low    json.Number `json:"low,omitempty"`
+	Volume json.Number `json:"vol,omitempty"`
+}
+
+func (t *tickerEventJSON) Ticker() (*models.TickerEvent, error) {
+	ticker := &models.TickerEvent{}
+
+	at, err := t.At.Int64()
+	if err != nil {
+		return nil, err
+	}
+	ticker.At = time.Unix(0, at*1000000)
+	ticker.Market = t.Market
+	ticker.Buy, err = t.Buy.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	ticker.Sell, err = t.Sell.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	ticker.Open, err = t.Open.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	ticker.Last, err = t.Last.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	ticker.High, err = t.High.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	ticker.Low, err = t.Low.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	ticker.Volume, err = t.Volume.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	return ticker, nil
+}
+
+type tradeEventJSON struct {
+	At     json.Number `json:"at,omitempty"`
+	Market string      `json:"market,omitempty"`
+	Volume json.Number `json:"volume,omitempty"`
+	Price  json.Number `json:"price,omitempty"`
+}
+
+func (t tradeEventJSON) Trade() (*models.TradeEvent, error) {
+	trade := &models.TradeEvent{}
+
+	at, err := t.At.Int64()
+	if err != nil {
+		return nil, err
+	}
+	trade.At = time.Unix(0, at*1000000)
+	trade.Market = t.Market
+	trade.Price, err = t.Price.Float64()
+	if err != nil {
+		return nil, err
+	}
+	trade.Volume, err = t.Volume.Float64()
+	if err != nil {
+		return nil, err
+	}
+
+	return trade, nil
 }
