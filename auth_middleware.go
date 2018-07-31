@@ -16,10 +16,7 @@ package max
 
 import (
 	"bytes"
-	"crypto/hmac"
-	"crypto/sha256"
 	"encoding/base64"
-	"encoding/hex"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -61,16 +58,12 @@ func (m authMiddleware) RoundTrip(req *http.Request) (*http.Response, error) {
 
 	body, _ := json.Marshal(params)
 	req.Body = ioutil.NopCloser(bytes.NewBuffer(body))
-
 	payload := base64.StdEncoding.EncodeToString(body)
-
-	mac := hmac.New(sha256.New, []byte(m.secretKey))
-	mac.Write([]byte(payload))
 
 	// Write auth headers
 	req.Header.Set(HeaderAccessKey, m.accessKey)
 	req.Header.Set(HeaderPayloadKey, payload)
-	req.Header.Set(HeaderSignature, hex.EncodeToString(mac.Sum(nil)))
+	req.Header.Set(HeaderSignature, signPayload([]byte(m.secretKey), []byte(payload)))
 
 	req.RequestURI = req.URL.Path
 	req.ContentLength = int64(len(body))

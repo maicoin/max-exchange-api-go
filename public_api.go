@@ -17,8 +17,6 @@ package max
 import (
 	"context"
 	"encoding/json"
-	"io"
-	"sync"
 	"time"
 
 	"github.com/maicoin/max-exchange-api-go/models"
@@ -77,30 +75,10 @@ func (c *publicClient) Tickers(ctx context.Context, opts ...CallOption) (models.
 		return nil, err
 	}
 
-	pr, pw := io.Pipe()
-	errCh := make(chan error, 2)
 	tt := tmpTickers{}
-	wg := sync.WaitGroup{}
-	wg.Add(2)
-
-	go func() {
-		defer wg.Done()
-		defer pw.Close()
-		errCh <- json.NewEncoder(pw).Encode(tickers)
-	}()
-
-	go func() {
-		defer wg.Done()
-		errCh <- json.NewDecoder(pr).Decode(&tt)
-	}()
-
-	wg.Wait()
-	close(errCh)
-
-	for e := range errCh {
-		if e != nil {
-			return nil, e
-		}
+	err = mapStruct(tickers, &tt)
+	if err != nil {
+		return nil, err
 	}
 
 	return tt.Tickers()
