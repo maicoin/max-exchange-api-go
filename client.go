@@ -15,6 +15,7 @@
 package max
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -26,6 +27,7 @@ func NewClient(opts ...ClientOption) *client {
 		requestTimeout: 10 * time.Second,
 		cfg:            api.NewConfiguration(),
 		middlewares:    make([]middleware, 0),
+		stopCh:         make(chan struct{}),
 	}
 
 	for _, opt := range opts {
@@ -34,7 +36,13 @@ func NewClient(opts ...ClientOption) *client {
 
 	c.c = api.NewAPIClient(c.config())
 
+	go timeCalibrater(c, 1*time.Hour)
+
 	return c
+}
+
+func (c *client) Close() {
+	close(c.stopCh)
 }
 
 // Interface check
@@ -45,8 +53,11 @@ type client struct {
 	c              *api.APIClient
 	requestTimeout time.Duration
 	middlewares    []middleware
+	stopCh         chan struct{}
 
-	cfg *api.Configuration
+	timeDiff       time.Duration
+	cfg            *api.Configuration
+	timeCalibrater *time.Ticker
 }
 
 type middleware func(http.RoundTripper) http.RoundTripper
@@ -63,4 +74,23 @@ func (c *client) config() *api.Configuration {
 	c.cfg.HTTPClient.Timeout = c.requestTimeout
 
 	return c.cfg
+}
+
+func timeCalibrater(c *client, period time.Duration) {
+	ticker := time.NewTicker(period)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			t, err := c.Time(context.Background())
+			if err != nil {
+				continue
+			}
+
+			c.timeDiff = t.Sub(time.Now())
+		case <-c.stopCh:
+			return
+		}
+	}
 }

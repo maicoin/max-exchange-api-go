@@ -24,7 +24,11 @@ type ClientOption func(*client)
 // AuthToken passess the access key and secret key to the API client.
 func AuthToken(accessKey, secretKey string) ClientOption {
 	return func(c *client) {
-		c.middlewares = append(c.middlewares, newAuthMiddleware(accessKey, secretKey))
+		c.middlewares = append(c.middlewares, newAuthMiddleware(accessKey, secretKey,
+			func() time.Duration {
+				return c.timeDiff
+			},
+		))
 	}
 }
 

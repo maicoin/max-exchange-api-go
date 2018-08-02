@@ -15,26 +15,23 @@
 package max
 
 import (
-	"sync"
+	"sync/atomic"
 	"time"
 )
 
 var latestNonce int64
-var mu sync.Mutex
 
-func nonce() (n int64) {
-	mu.Lock()
-	defer mu.Unlock()
+func nonce(diff time.Duration) (n int64) {
 	defer func() {
 		latestNonce = n
 	}()
 
-	return maximum(latestNonce, time.Now().Unix()*1000) + 1
+	return atomic.AddInt64(maximum(latestNonce, time.Now().Unix()*1000), 1)
 }
 
-func maximum(x, y int64) int64 {
+func maximum(x, y int64) *int64 {
 	if x > y {
-		return x
+		return &x
 	}
-	return y
+	return &y
 }

@@ -30,6 +30,7 @@ func main() {
 		// max.Logging(logger),
 		max.AuthToken(os.Getenv("MAX_ACCESS_KEY"), os.Getenv("MAX_SECRET_KEY")),
 	)
+	defer client.Close()
 
 	createStopMarketSellOrder(client)
 	cancelAllSellOrder(client)

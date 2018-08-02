@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 const (
@@ -28,26 +29,28 @@ const (
 	HeaderSignature  = "X-MAX-SIGNATURE"
 )
 
-func newAuthMiddleware(accessKey, secretKey string) middleware {
+func newAuthMiddleware(accessKey, secretKey string, getTimeDiff func() time.Duration) middleware {
 	return func(n http.RoundTripper) http.RoundTripper {
 		return authMiddleware{
-			accessKey: accessKey,
-			secretKey: secretKey,
-			next:      n,
+			accessKey:   accessKey,
+			secretKey:   secretKey,
+			getTimeDiff: getTimeDiff,
+			next:        n,
 		}
 	}
 }
 
 type authMiddleware struct {
-	accessKey string
-	secretKey string
-	next      http.RoundTripper
+	accessKey   string
+	secretKey   string
+	getTimeDiff func() time.Duration
+	next        http.RoundTripper
 }
 
 func (m authMiddleware) RoundTrip(req *http.Request) (*http.Response, error) {
 	params := make(map[string]interface{})
 	params["path"] = req.URL.Path
-	params["nonce"] = nonce()
+	params["nonce"] = nonce(m.getTimeDiff())
 
 	if req.Body != nil {
 		err := json.NewDecoder(req.Body).Decode(&params)

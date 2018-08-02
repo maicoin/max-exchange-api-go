@@ -24,6 +24,7 @@ import (
 
 func main() {
 	client := max.NewClient()
+	defer client.Close()
 
 	getMarkets(client)
 	getTickers(client)
