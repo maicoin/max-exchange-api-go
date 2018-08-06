@@ -1,4 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GoDoc](https://godoc.org/github.com/maicoin/max-exchange-api-go?status.svg)](https://godoc.org/github.com/maicoin/max-exchange-api-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/maicoin/max-exchange-api-go)](https://goreportcard.com/report/github.com/maicoin/max-exchange-api-go)
 
 # max-exchange-api-go
 MAX (Maicoin Assets eXchange) Go SDK

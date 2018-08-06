@@ -103,7 +103,7 @@ type PublicAPI interface {
 // PrivateAPI provides an interface the private MAX APIs which
 // has authtication requirements and rate limits.
 type PrivateAPI interface {
-	// Me returns user profile and accounts infomation
+	// Me returns user profile and accounts information
 	//
 	// Available `CallOption`:
 	//

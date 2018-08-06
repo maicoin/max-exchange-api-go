@@ -28,7 +28,7 @@ import (
 
 type privateClient = client
 
-// Me returns user profile and accounts infomation
+// Me returns user profile and accounts information
 //
 // Available `CallOption`:
 //
