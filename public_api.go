@@ -32,6 +32,7 @@ func (c *publicClient) Markets(ctx context.Context, opts ...CallOption) (results
 	markets, _, err := c.c.PublicApi.GetApiV2Markets(ctx)
 
 	for _, m := range markets {
+		m := m
 		results = append(results, &m)
 	}
 
@@ -46,6 +47,7 @@ func (c *publicClient) Currencies(ctx context.Context, opts ...CallOption) (resu
 	currencies, _, err := c.c.PublicApi.GetApiV2Currencies(ctx)
 
 	for _, c := range currencies {
+		c := c
 		results = append(results, &c)
 	}
 
@@ -146,6 +148,7 @@ func (c *publicClient) Trades(ctx context.Context, market string, opts ...CallOp
 
 	trades, _, err := c.c.PublicApi.GetApiV2Trades(ctx, market, o)
 	for _, t := range trades {
+		t := t
 		results = append(results, &t)
 	}
 
