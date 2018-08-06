@@ -28,7 +28,7 @@ import (
 
 type privateClient = client
 
-// Me returns user profile and accounts infomation
+// Me returns user profile and accounts information
 //
 // Available `CallOption`:
 //
@@ -76,6 +76,7 @@ func (c *privateClient) Deposits(ctx context.Context, opts ...CallOption) (resul
 
 	deposits, _, err := c.c.PrivateApi.GetApiV2Deposits(ctx, "", "", "", o)
 	for _, d := range deposits {
+		d := d
 		results = append(results, &d)
 	}
 
@@ -101,6 +102,7 @@ func (c *privateClient) DepositAddress(ctx context.Context, opts ...CallOption) 
 
 	deposits, _, err := c.c.PrivateApi.GetApiV2DepositAddress(ctx, "", "", "", o)
 	for _, d := range deposits {
+		d := d
 		results = append(results, &d)
 	}
 
@@ -123,8 +125,8 @@ func (c *privateClient) DepositAddresses(ctx context.Context, opts ...CallOption
 
 	deposits, _, err := c.c.PrivateApi.GetApiV2DepositAddresses(ctx, "", "", "", o)
 	for _, d := range deposits {
-		dd := d
-		results = append(results, &dd)
+		d := d
+		results = append(results, &d)
 	}
 
 	return results, err
@@ -141,6 +143,7 @@ func (c *privateClient) DepositAddresses(ctx context.Context, opts ...CallOption
 func (c *privateClient) CreateDepositAddresses(ctx context.Context, currency string, opts ...CallOption) (results []*models.PaymentAddress, err error) {
 	deposits, _, err := c.c.PrivateApi.PostApiV2DepositAddresses(ctx, "", "", "", currency)
 	for _, d := range deposits {
+		d := d
 		results = append(results, &d)
 	}
 
@@ -171,6 +174,7 @@ func (c *privateClient) Withdrawals(ctx context.Context, opts ...CallOption) (re
 
 	withdrawals, _, err := c.c.PrivateApi.GetApiV2Withdrawals(ctx, "", "", "", o)
 	for _, w := range withdrawals {
+		w := w
 		results = append(results, &w)
 	}
 
@@ -335,6 +339,7 @@ func (c *privateClient) Orders(ctx context.Context, market string, opts ...CallO
 
 	orders, _, err := c.c.PrivateApi.GetApiV2Orders(ctx, "", "", "", market, o)
 	for _, order := range orders {
+		order := order
 		results = append(results, &order)
 	}
 
@@ -365,6 +370,7 @@ func (c *privateClient) MyTrades(ctx context.Context, market string, opts ...Cal
 
 	trades, _, err := c.c.PrivateApi.GetApiV2TradesMy(ctx, "", "", "", market, o)
 	for _, t := range trades {
+		t := t
 		results = append(results, &t)
 	}
 
